@@ -1,0 +1,12 @@
+:root{--native-bar:calc(78px + env(safe-area-inset-top,0px))}
+.topbar{height:var(--native-bar);padding-top:env(safe-area-inset-top,0px)}
+.sidebar{padding-top:calc(24px + env(safe-area-inset-top,0px))}
+.study-panel{top:var(--native-bar);height:calc(100dvh - var(--native-bar))}
+.assistant-backdrop{top:var(--native-bar)}
+.reader{padding-bottom:calc(32px + env(safe-area-inset-bottom,0px))}
+@media(max-width:960px){
+  .panel-open .study-panel{top:var(--native-bar);height:calc(100dvh - var(--native-bar))}
+}
+@media(max-width:640px){
+  :root{--native-bar:calc(64px + env(safe-area-inset-top,0px))}
+}

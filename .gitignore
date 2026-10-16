@@ -1,0 +1,13 @@
+node_modules/
+build/
+Payload/
+*.ipa
+*.p12
+*.mobileprovision
+.env
+.DS_Store
+ios/App/App/public/
+ios/App/App/capacitor.config.json
+ios/App/App/Assets.xcassets/Splash.imageset/
+ios/App/App.xcodeproj/xcuserdata/
+ios/App/App.xcworkspace/xcuserdata/

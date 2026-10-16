@@ -1,0 +1,12 @@
+{
+  "appId": "io.github.penghui616.jingdu",
+  "appName": "静读",
+  "webDir": "www",
+  "backgroundColor": "#f9f8f4",
+  "loggingBehavior": "none",
+  "ios": {
+    "contentInset": "never",
+    "backgroundColor": "#f9f8f4",
+    "preferredContentMode": "mobile"
+  }
+}

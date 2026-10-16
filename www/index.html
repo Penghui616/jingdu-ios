@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh-CN" data-api-mode="direct">
+<head>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; worker-src 'self'; connect-src 'self' https://dashscope.aliyuncs.com https://dashscope-intl.aliyuncs.com https://dashscope-us.aliyuncs.com https://*.cn-beijing.maas.aliyuncs.com https://*.ap-southeast-1.maas.aliyuncs.com https://*.us-east-1.maas.aliyuncs.com; img-src 'self' data:; base-uri 'self'; object-src 'none'">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="一处安静的读经空间。本地圣经阅读、经文搜索与个人笔记。">
+  <meta name="theme-color" content="#f9f8f4">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="静读">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+  <title>静读 · 圣经</title><link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css">
+  <script src="native.js" defer></script><script src="direct-api.js" defer></script>
+  <script src="speech.js" defer></script>
+  <script src="app.js" defer></script>
+  
+<link rel="stylesheet" href="native.css"></head>
+<body>
+  <button id="menu-backdrop" class="menu-backdrop" aria-label="关闭书卷目录" hidden></button>
+  <aside class="sidebar" id="sidebar" aria-label="书卷导航" tabindex="-1">
+    <a href="#" class="brand" aria-label="静读首页"><span class="brand-icon">✧</span><span>静读<span class="brand-sub">THE BIBLE, SLOWLY.</span></span></a>
+    <div class="side-heading">你的读经空间</div>
+    <button class="nav-button active" id="read-nav"><span>▤</span> 阅读圣经 <span class="nav-dot"></span></button>
+    <button class="nav-button" id="saved-nav"><span>▧</span> 读经笔记 <span class="count" id="saved-count">0</span></button>
+    <div class="sidebar-line"></div>
+    <div class="side-heading book-heading">书卷目录 <span>66 卷</span></div>
+    <label class="sr-only" for="book-filter">筛选书卷</label><input id="book-filter" class="book-filter" placeholder="查找书卷…">
+    <div class="testaments" aria-label="选择新旧约"><button id="old-tab" class="active" aria-pressed="true">旧约</button><button id="new-tab" aria-pressed="false">新约</button></div>
+    <nav id="book-list" class="book-list" aria-label="书卷列表"></nav>
+    <div class="side-footer"><span class="status-dot"></span> 本地读经 · 安静相伴<button id="about-button" aria-label="关于经文来源">ⓘ</button></div>
+  </aside>
+  <div class="workspace">
+    <header class="topbar">
+      <button class="icon-button mobile-menu" id="menu-button" aria-label="打开书卷目录" aria-controls="sidebar" aria-expanded="false">☰</button>
+      <div class="breadcrumb">圣经 <span>/</span> <span id="crumb">正在载入</span></div>
+      <div class="top-actions"><button id="search-button" class="search-trigger"><span>⌕</span> 搜索经文 <kbd>Ctrl K</kbd></button><button id="panel-button" class="assistant-toggle" aria-label="显示或隐藏助手" aria-controls="study-panel">助手</button></div>
+    </header>
+    <div class="reading-layout">
+      <main id="main" class="reader">
+        <div class="reader-top"><span class="edition">和合本 · 简体</span></div>
+        <div class="chapter-heading"><div><div id="book-code" class="book-code">THE HOLY BIBLE</div><h1 id="chapter-title">准备你的读经空间</h1></div></div>
+        <div class="reader-controls"><div><button id="chapter-picker-button" class="chapter-picker-button">选择章节 ▦</button><label for="chapter-select" class="sr-only">选择章节</label><select id="chapter-select" aria-label="选择章节"></select><span class="verse-count" id="verse-count"></span></div><div class="type-controls"><button id="smaller" aria-label="减小字号">A−</button><button id="larger" aria-label="增大字号">A+</button></div></div>
+        <div id="selection-toolbar" class="selection-toolbar" hidden><span id="selection-summary" aria-live="polite"></span><div><button id="selection-notes">记笔记</button><button id="selection-ask">问助手</button><button id="clear-selection">清空</button></div></div>
+        <div id="loading" role="status">正在读取本地经文…</div><article id="verses" aria-label="经文"></article>
+        <div class="chapter-navigation"><button id="prev-chapter">← 上一章</button><span id="chapter-progress"></span><button id="next-chapter">下一章 →</button></div>
+        <section id="notes-pane" class="reading-notes" aria-labelledby="notes-heading"><div class="notes-heading"><h2 id="notes-heading">读经笔记</h2><div><button class="subtle-button" id="import-button">导入</button><button class="subtle-button" id="export-button">导出</button></div></div><input type="file" id="import-file" accept="application/json,.json" hidden><div id="note-list"></div></section>
+      </main>
+      <button id="assistant-backdrop" class="assistant-backdrop" aria-label="关闭助手" hidden></button>
+      <aside class="study-panel" id="study-panel" aria-label="研读助手">
+        <div class="panel-body" id="assistant-pane">
+          <div class="assistant-heading"><h2>研读助手</h2><button id="close-assistant" class="assistant-close" type="button">× 关闭助手</button><div><button id="new-chat" class="subtle-button">新对话</button><button id="model-settings" class="subtle-button" aria-label="模型设置" title="模型设置">设置</button></div></div>
+          <p id="model-status" class="model-status" role="status" hidden></p>
+          <div id="chat-log" class="chat-log" role="log" aria-live="polite" aria-label="助手对话"></div>
+          <div class="chat-context" id="chat-context"><label><input type="checkbox" id="attach-context" aria-label="附带所选经文"><span id="assistant-reference"></span></label></div>
+          <p id="chat-error" class="form-error" role="alert" hidden></p>
+          <form id="chat-form"><label class="sr-only" for="chat-input">你的问题</label><textarea id="chat-input" maxlength="4000" placeholder="输入你的问题…"></textarea><div class="chat-send-row"><label class="auto-speak-label"><input id="auto-speak" type="checkbox">朗读</label><button id="stop-speech" type="button" hidden>停止朗读</button><button id="cancel-chat" type="button" hidden>停止</button><button id="send-chat" class="primary-button">发送</button></div></form>
+          <p id="speech-status" role="status"></p>
+        </div>
+      </aside>
+    </div>
+  </div>
+  <dialog id="search-dialog"><div class="dialog-heading"><h2 id="dialog-title">搜索经文</h2><button id="close-dialog" class="icon-button" aria-label="关闭弹窗">×</button></div><form id="search-form"><label for="search-input" class="sr-only">关键词或经文地址</label><input id="search-input" placeholder="输入关键词，或约翰福音 3:16"><button class="primary-button">搜索</button></form><p id="result-summary" class="muted" aria-live="polite">支持全文关键词与书卷章节目次。</p><div id="results"></div></dialog>
+  <dialog id="chapter-dialog"><div class="dialog-heading"><h2>选择书卷与章节</h2><button id="close-chapters" class="icon-button" aria-label="关闭章节选择">×</button></div><label for="picker-book" class="note-label">书卷</label><select id="picker-book"></select><p class="muted">点击数字，直接打开对应章节。</p><div id="chapter-grid" class="chapter-grid"></div></dialog>
+  <dialog id="settings-dialog"><div class="dialog-heading"><h2>研读助手 · 模型设置</h2><button id="close-settings" class="icon-button" aria-label="关闭模型设置">×</button></div><form id="settings-form"><label for="model-region">服务地域</label><select id="model-region"><option value="https://dashscope.aliyuncs.com/compatible-mode/v1">阿里云百炼 · 北京</option><option value="https://dashscope-intl.aliyuncs.com/compatible-mode/v1">阿里云百炼 · 新加坡</option><option value="custom">自定义 / 业务空间专属地址</option></select><label for="model-url">服务地址（Base URL）</label><input id="model-url" type="url" required><label for="model-name">模型标识</label><input id="model-name" value="qwen3.8-max" required><label for="model-key">API Key</label><input id="model-key" type="password" autocomplete="new-password" placeholder="填写对应地域的百炼 API Key"><p id="key-hint" class="muted">密钥仅保存在当前设备浏览器中，直接发送给千问，不上传网站服务器或笔记备份。</p><p id="settings-error" class="form-error" role="alert" hidden></p><button id="save-model" class="primary-button">保存配置</button></form></dialog>
+  <dialog id="about-dialog"><div class="dialog-heading"><h2>关于静读</h2><button id="close-about" class="icon-button" aria-label="关闭来源说明">×</button></div><p>静读是一款可在本地运行的圣经阅读器。经文随项目提供，阅读不依赖在线服务；笔记、书签和进度保存在此 App。</p><p>当前经文：中文和合本（简体转换）。原数据取自 thiagobodruk/bible 的固定历史版本，以 OpenCC 进行繁简字形转换并清理逐字空格，未使用 AI 改写经文。原有章节目次保持不变。</p><p>数据仓库采用 CC BY-NC 2.0 BR 许可。商业发布前需重新核对或更换数据来源。</p><p><a href="data/source.json" target="_blank" rel="noopener">查看完整来源与版本记录 ↗</a></p></dialog>
+  <div id="toast" class="toast" role="status"></div>
+</body></html>

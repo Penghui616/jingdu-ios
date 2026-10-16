@@ -1,0 +1,12 @@
+{
+  "translation": "和合本（简体转换）",
+  "source": "https://raw.githubusercontent.com/thiagobodruk/bible/13225a15fa5e3e3043495b0c82df56c3fdfeb7f4/json/zh_cuv.json",
+  "revision": "13225a15fa5e3e3043495b0c82df56c3fdfeb7f4",
+  "sha256": "5e6788f8cf8d3f4d815471852dcc316bf15774ccf7c118a4b5c81f4d0a8e1a59",
+  "attribution": "thiagobodruk/bible contributors",
+  "repositoryLicense": "CC BY-NC 2.0 BR",
+  "licenseUrl": "https://creativecommons.org/licenses/by-nc/2.0/br/",
+  "upstreamReadme": "https://github.com/thiagobodruk/bible/blob/13225a15fa5e3e3043495b0c82df56c3fdfeb7f4/README.md",
+  "changes": "Removed inter-character whitespace; converted traditional Chinese to simplified with opencc-python-reimplemented 0.1.7, t2s. Added Chinese book names and standard codes. Original chapter/verse ordering preserved. This is a character conversion, not a separately proofread simplified edition.",
+  "notes": "Upstream describes automatically crawled data that may contain errors. Chapter/verse totals checked; not independently proofread verse by verse."
+}
