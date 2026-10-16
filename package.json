@@ -2,7 +2,7 @@
   "name": "jingdu-ios",
   "version": "1.0.0",
   "private": true,
-  "scripts": { "sync": "cap sync ios", "open": "cap open ios" },
+  "scripts": { "sync": "cap sync ios && node scripts/fix-spm.cjs", "open": "cap open ios" },
   "dependencies": {
     "@capacitor/core": "8.5.3",
     "@capacitor/ios": "8.5.3",

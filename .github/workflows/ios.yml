@@ -16,7 +16,7 @@ jobs:
           node-version: '24'
           cache: npm
       - run: npm ci --no-audit --no-fund
-      - run: npx cap sync ios
+      - run: npm run sync
       - name: Build iPhone application without distribution signing
         run: |
           set -euo pipefail
@@ -36,6 +36,25 @@ jobs:
             Jingdu-unsigned.ipa
             SHA256SUMS.txt
           retention-days: 7
+      - name: Launch in iPhone simulator
+        run: |
+          set -euo pipefail
+          xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Release -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -derivedDataPath build-simulator CODE_SIGNING_ALLOWED=NO build > simulator-build.log 2>&1 || { tail -n 80 simulator-build.log; exit 1; }
+          DEVICE=$(xcrun simctl list devices available -j | python3 -c 'import sys,json; print(next(d["udid"] for ds in json.load(sys.stdin)["devices"].values() for d in ds if "iPhone" in d["name"]))')
+          xcrun simctl boot "$DEVICE"
+          xcrun simctl bootstatus "$DEVICE" -b
+          xcrun simctl install "$DEVICE" build-simulator/Build/Products/Release-iphonesimulator/App.app
+          xcrun simctl launch "$DEVICE" io.github.penghui616.jingdu
+          sleep 15
+          xcrun simctl io "$DEVICE" screenshot iphone-launch.png
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: simulator-check
+          path: |
+            iphone-launch.png
+            simulator-build.log
+          retention-days: 3
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
